@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>破钢琴</title>
+  <style>
+    body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f0f0;
+  margin: 0; /* 移除默认的 body 边距 */
+  padding: 10px; /* 添加一些内边距，以适应手机屏幕边缘 */
+}
+    .keyboard {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr); /* 每行五个按键 */
+  gap: 5px; /* 按键之间的间距 */
+  justify-content: center; /* 按键居中对齐 */
+  max-width: 90%; /* 限制钢琴的最大宽度，以适应不同屏幕尺寸 */
+  margin: 0 auto; /* 水平居中对齐 */
+
+    }
+    button {
+  width: 70px;
+  height: 70px;
+  background-color: white;
+  border: 2px solid black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border-radius: 12px
+  }
+  </style>
+</head>
+<body>
+  <div class="keyboard">
+    <button id="C4">C4</button>
+    <button id="D4">D4</button>
+    <button id="E4">E4</button>
+    <button id="F4">F4</button>
+    <button id="G4">G4</button>
+    <button id="A4">A4</button>
+    <button id="B4">B4</button>
+    <button id="C5">C5</button>
+    <button id="D5">D5</button>
+    <button id="E5">E5</button>
+    <button id="F5">F5</button>
+    <button id="G5">G5</button>
+    <button id="A5">A5</button>
+    <button id="B5">B5</button>
+    <button id="C6">C6</button>
+  </div>
+
+  <script>
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    // 定义不同音调的频率
+    const frequencies = {
+      C4: 261.63,
+      D4: 293.66,
+      E4: 329.63,
+      F4: 349.23,
+      G4: 392.00,
+      A4: 440.00,
+      B4: 493.88,
+      C5: 523.25,
+      D5: 587.33,
+      E5: 659.25,
+      F5: 698.46,
+      G5: 783.99,
+      A5: 880.00,
+      B5: 987.77,
+      C6: 1046.50
+    };
+
+    // 获取所有按钮
+    const buttons = document.querySelectorAll('button');
+
+    // 为每个按钮添加点击事件监听器
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        playNote(frequencies[button.id]);
+      });
+    });
+
+    // 播放指定频率的音符
+    function playNote(frequency) {
+      const oscillator = audioContext.createOscillator();
+      oscillator.type = 'sine'; // 设置波形类型
+      oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime); // 设置频率
+
+      // 连接到音频输出
+      oscillator.connect(audioContext.destination);
+
+      // 开始播放
+      oscillator.start();
+
+      // 1秒后停止
+      oscillator.stop(audioContext.currentTime + 0.5);
+    }
+  </script>
+</body>
+</html>
